@@ -9,6 +9,13 @@ router.get("/", async (req, res) => {
   return res.send(foods);
 });
 
+//endpoint to get a specific food
+router.get("/:id", async (req, res) => {
+  const food = await Food.findById(req.params.id);
+  if (!food) return res.status(404).send("no such food");
+  return res.send(food);
+});
+
 //endpoint to create food
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
