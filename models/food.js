@@ -13,4 +13,25 @@ const foodSchema = new mongoose.Schema({
 //defining the food model
 const Food = mongoose.model("foods", foodSchema);
 
+function validate(food) {
+  const schema = {
+    name: Joi.string()
+      .required()
+      .min(3)
+      .max(50),
+    numberInStock: Joi.number()
+      .required()
+      .min(0)
+      .max(200),
+    price: Joi.number()
+      .required()
+      .min(0)
+      .max(200),
+    categoryId: Joi.string().required()
+  };
+
+  return Joi.validate(food, schema);
+}
+
+exports.validate = validate;
 exports.Food = Food;
