@@ -13,7 +13,7 @@ const categoreySchema = new mongoose.Schema({
 });
 
 //modeling genre
-const Category = mongoose.model("genre", categoreySchema);
+const Category = mongoose.model("categories", categoreySchema);
 
 function validate(category) {
   const schema = {
