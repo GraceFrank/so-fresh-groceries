@@ -23,9 +23,14 @@ router.put("/:id", async (req, res) => {
     req.body,
     { new: true }
   );
-  if (!category) return res.status(404).send("genre does not exist");
-
+  if (!category) return res.status(404).send("invalid food category");
   return res.send(category);
+});
+
+router.delete("/:id", async (req, res) => {
+  const category = await Category.findByIdAndRemove(req.params.id);
+  if (!category) return res.status(404).send("no genre with given id");
+  res.send(category);
 });
 
 module.exports = router;
