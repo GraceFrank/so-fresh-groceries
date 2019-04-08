@@ -1,5 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const categories = require("./routes/categories");
+const app = express();
+
+app.use(express.json());
+app.use("/api/categories", categories);
 
 //conncet to database
 mongoose
@@ -12,5 +17,5 @@ mongoose
   });
 
 //defining port and listening on defined port
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`listening on port ${port}`));
