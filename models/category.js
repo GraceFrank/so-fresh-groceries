@@ -15,4 +15,17 @@ const categoreySchema = new mongoose.Schema({
 //modeling genre
 const Category = mongoose.model("genre", categoreySchema);
 
+function validate(category) {
+  const schema = {
+    name: joi
+      .string()
+      .required()
+      .min(3)
+  };
+
+  return joi.validate(category, schema);
+}
+
+exports.validate = validate;
+exports.categoreySchema = categoreySchema;
 exports.Category = Category;
