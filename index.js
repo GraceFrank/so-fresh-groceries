@@ -1,14 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const categories = require("./routes/categories");
+const foods = require("./routes/foods");
 const app = express();
 
 app.use(express.json());
 app.use("/api/categories", categories);
+app.use("/api/foods", foods);
 
 //conncet to database
 mongoose
-  .connect("mongodb://localhost/foodDb", { useNewUrlParser: true })
+  .connect("mongodb://localhost/so-fresh-groceries", { useNewUrlParser: true })
   .then(() => {
     console.log("connected to database...");
   })
