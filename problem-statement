@@ -1,0 +1,7 @@
+An online food ordering service.
+You were recently contacted by a friend to collaborate with him on a project. You are to build application backend for his restaurant food ordering service.
+
+Feature description 
+ All users should be able to see all foods and all foods are to belong to a category or food class. All users should be able to see a single food(A food object should contain some basic info like food name, description, price e.t.c). Only login users should be able to make food request. A food request can be a list of foods with quantity for each food. Then you are to have an admin user, he should be able to create, edit and delete foods and food category. He should be able to view all food request/orders. He should be able to mark an order as cancelled, processing, onroute and delivered. A user should be able to view the status of his order.
+
+NOTE: Make sure to apply all best practices.
