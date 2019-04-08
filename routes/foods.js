@@ -60,4 +60,14 @@ router.put("/:id", async (req, res) => {
 
   res.send(food);
 });
+
+//endpoint to delete a food
+router.delete("/:id", async (req, res) => {
+  const food = await Food.findByIdAndRemove(req.params.id);
+
+  if (!food) return res.status(404).send("no food with given id");
+
+  res.send(food);
+});
+
 module.exports = router;
