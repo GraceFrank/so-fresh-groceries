@@ -34,4 +34,30 @@ router.post("/", async (req, res) => {
 
   return res.send(food);
 });
+
+//endpoint to modify/update food
+router.put("/:id", async (req, res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const category = await Category.findById(req.body.categoryId);
+  if (!category) return res.status(400).send(" invalid food category");
+
+  const food = await Food.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      numberInStock: req.body.numberInStock,
+      pricePerUnit: req.body.pricePerUnit,
+      measurmentUnit: req.body.measurmentUnit,
+      category: { _id: category._id, name: category.name }
+    },
+    { new: true }
+  );
+
+  if (!food)
+    return res.status(404).send("The food with the given ID was not found.");
+
+  res.send(food);
+});
 module.exports = router;
