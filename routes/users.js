@@ -1,5 +1,6 @@
 const express = require('express');
-const { User, validate } = require('../models/user');
+const User = require('../models/user');
+const validate = require('../api-validations/user');
 
 const router = express.Router();
 
@@ -24,4 +25,5 @@ router.get('/:id', async (req, res) => {
   res.send(user);
 });
 
+//enpoint to update a user
 module.exports = router;
