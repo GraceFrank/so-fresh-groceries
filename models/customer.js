@@ -26,3 +26,6 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 });
+
+//compiling model
+const Customer = mongoose.model("customers", userSchema);
