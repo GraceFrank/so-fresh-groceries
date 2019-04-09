@@ -36,4 +36,11 @@ router.put('/:id', async (req, res) => {
   return res.send(user);
 });
 
+//endpoint to delete a user
+router.delete('/:id', async (req, res) => {
+  const user = await User.findByIdAndRemove(req.params.id);
+  if (!user) return res.status(404).send('user with given id dosent exist');
+  res.send(user);
+});
+
 module.exports = router;
