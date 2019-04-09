@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const joi = require("joi");
 
-//creating schema for movie genre
+//creating schema for category of food
 const categoreySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,7 +12,7 @@ const categoreySchema = new mongoose.Schema({
   }
 });
 
-//modeling genre
+//modeling food category
 const Category = mongoose.model("categories", categoreySchema);
 
 function validate(category) {
