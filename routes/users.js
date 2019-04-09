@@ -17,4 +17,11 @@ router.post('/', async (req, res) => {
   res.send(newUser);
 });
 
+//endpoint to get a specific user
+router.get('/:id', async (req, res) => {
+  const user = await User.find({ _id: req.params.id });
+  if (!user) return res.status(400).send('user does not exisr');
+  res.send(user);
+});
+
 module.exports = router;
