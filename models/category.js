@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const joi = require("joi");
+const mongoose = require('mongoose');
 
 //creating schema for category of food
 const categoreySchema = new mongoose.Schema({
@@ -13,19 +12,6 @@ const categoreySchema = new mongoose.Schema({
 });
 
 //modeling food category
-const Category = mongoose.model("categories", categoreySchema);
+const Category = mongoose.model('categories', categoreySchema);
 
-function validate(category) {
-  const schema = {
-    name: joi
-      .string()
-      .required()
-      .min(3)
-  };
-
-  return joi.validate(category, schema);
-}
-
-exports.validate = validate;
-exports.categoreySchema = categoreySchema;
-exports.Category = Category;
+module.exports = Category;
