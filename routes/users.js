@@ -26,4 +26,14 @@ router.get('/:id', async (req, res) => {
 });
 
 //enpoint to update a user
+router.put('/:id', async (req, res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true
+  });
+  if (!user) return res.status(404).send('no such user');
+  return res.send(user);
+});
+
 module.exports = router;
