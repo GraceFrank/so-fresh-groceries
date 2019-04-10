@@ -6,8 +6,12 @@ const Category = require('../models/category');
 
 //endpoint to get all foods
 router.get('/', async (req, res) => {
-  const foods = await Food.find();
-  return res.send(foods);
+  await Food.find()
+    .populate('category')
+    .exec((err, food) => {
+      if (err) console.log(err.message);
+      return res.send(food);
+    });
 });
 
 //endpoint to get a specific food
@@ -22,7 +26,7 @@ router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const category = await Category.findById(req.body.categoryId);
+  const category = await Category.findById(req.body.category);
   if (!category) return res.status(400).send('invalid category');
 
   let food = await Food.create({
@@ -30,10 +34,10 @@ router.post('/', async (req, res) => {
     numberInStock: req.body.numberInStock,
     pricePerUnit: req.body.pricePerUnit,
     measurmentUnit: req.body.measurmentUnit,
-    category: { _id: category._id, name: category.name }
+    category: req.body.category
   });
 
-  return res.send(food);
+  return res.send();
 });
 
 //endpoint to modify/update food

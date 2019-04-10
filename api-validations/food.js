@@ -18,7 +18,7 @@ function validate(food) {
       .required()
       .min(1)
       .max(50),
-    categoryId: Joi.string().required()
+    category: Joi.string().required()
   };
 
   return Joi.validate(food, schema);
