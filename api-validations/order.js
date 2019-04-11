@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-function validate(food) {
+function validate(order) {
   const schema = {
     user: Joi.string()
       .required()
@@ -20,12 +20,25 @@ function validate(food) {
         .min(3)
         .max(255)
     }),
-    foodItems: Joi.array()
-      .items(Joi.string())
+    foodItem: Joi.object()
+      .keys({
+        foodId: Joi.string().required(),
+        quantity: Joi.number()
+          .min(1)
+          .max(50)
+          .required()
+      })
       .required()
   };
 
-  return Joi.validate(food, schema);
+  return Joi.validate(order, schema);
 }
 
-module.exports = validate;
+function validateStatus(update) {
+  const schema = {
+    status: Joi.any().valid(['processing', 'cancelled', 'onroute', 'delivered'])
+  };
+  return Joi.validate(update, schema);
+}
+exports.validateStatus = validateStatus;
+exports.validate = validate;
