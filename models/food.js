@@ -23,8 +23,7 @@ const foodSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: 'categories',
     required: true
-  },
-  shippingFee: { type: Number, required: true, default: 20 }
+  }
 });
 
 //defining the food model
