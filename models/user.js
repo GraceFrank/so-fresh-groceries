@@ -8,6 +8,12 @@ const userSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255
   },
+  email: {
+    type: String,
+    require: true,
+    minlength: 3,
+    maxlength: 255
+  },
   isAdmin: { type: Boolean, default: false },
   phone: {
     type: 'string',

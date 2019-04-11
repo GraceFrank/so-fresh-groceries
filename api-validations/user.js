@@ -6,7 +6,10 @@ function validate(user) {
       .required()
       .min(3)
       .max(255),
-
+    email: Joi.string()
+      .required()
+      .min(3)
+      .max(255),
     phone: Joi.string()
       .min(10)
       .max(10)
