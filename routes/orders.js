@@ -59,4 +59,16 @@ router.post('/', async (req, res) => {
   return res.send(order);
 });
 
+router.patch('/:id', async (req, res) => {
+  const { error } = validateStatus(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const order = await Order.findByIdAndUpdate(
+    req.params.id,
+    { status: req.body.status },
+    { new: true }
+  );
+  if (!order) res.status(404).send('invalid order id');
+  res.send(order);
+});
 module.exports = router;
