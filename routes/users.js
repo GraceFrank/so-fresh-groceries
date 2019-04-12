@@ -1,4 +1,6 @@
 const express = require('express');
+const _ = require('lodash');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const validate = require('../api-validations/user');
 
@@ -14,8 +16,14 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  let newUser = await User.create(req.body);
-  res.send(newUser);
+  let newUser = await new User(
+    _.pick(req.body, ['name', 'email', 'password', 'address', 'phone'])
+  );
+  const salt = await bcrypt.genSalt(10);
+  newUser.password = await bcrypt.hash(newUser.password, salt);
+  await newUser.save();
+
+  res.send(_.pick(req.body, ['name', 'email', 'address', 'phone']));
 });
 
 //endpoint to get a specific user
