@@ -3,6 +3,8 @@ const router = express.Router();
 const Food = require('../models/food');
 const validate = require('../api-validations/food');
 const Category = require('../models/category');
+const authorize = require('../middleware/authorize');
+const authAdmin = require('../middleware/auth-admin');
 
 //endpoint to get all foods
 router.get('/', async (req, res) => {
@@ -21,7 +23,7 @@ router.get('/:id', async (req, res) => {
   return res.send(food);
 });
 
-//endpoint to create food
+//endpoint to create food, only admin can create food
 router.post('/', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -37,7 +39,7 @@ router.post('/', [authorize, authAdmin], async (req, res) => {
     category: req.body.category
   });
 
-  return res.send();
+  return res.send(food);
 });
 
 //endpoint to modify/update food
@@ -45,7 +47,7 @@ router.put('/:id', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const category = await Category.findById(req.body.categoryId);
+  const category = await Category.findById(req.body.category);
   if (!category) return res.status(400).send(' invalid food category');
 
   const food = await Food.findByIdAndUpdate(
