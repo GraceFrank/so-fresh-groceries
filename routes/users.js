@@ -16,6 +16,11 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+
+  //check if a user with provided email already exist
+  const user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send('email already registered');
+
   let newUser = await new User(
     _.pick(req.body, ['name', 'email', 'password', 'address', 'phone'])
   );
@@ -29,11 +34,11 @@ router.post('/', async (req, res) => {
 //endpoint to get a specific user
 router.get('/:id', async (req, res) => {
   const user = await User.find({ _id: req.params.id });
-  if (!user) return res.status(400).send('user does not exisr');
+  if (!user) return res.status(400).send('user does not exist');
   res.send(user);
 });
 
-//enpoint to update a user
+//endpoint to update a user
 router.put('/:id', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
