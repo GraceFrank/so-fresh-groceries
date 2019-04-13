@@ -3,11 +3,13 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const validate = require('../api-validations/user');
+const authorize = require('../middleware/authorize');
+const authAdmin = require('../middleware/auth-admin');
 
 const router = express.Router();
 
-//endpoint to read all users
-router.get('/', async (req, res) => {
+//endpoint to read all users, only admin should be able to view all users
+router.get('/', [authorize, authAdmin], async (req, res) => {
   const users = await User.find();
   res.send(users);
 });
