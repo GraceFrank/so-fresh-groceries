@@ -1,9 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const config = require('config');
 const categories = require('./routes/categories');
 const foods = require('./routes/foods');
 const users = require('./routes/users');
 const orders = require('./routes/orders');
+const login = require('./routes/login');
+
+//check if jwt has been set in the environment variable, if not set exit app
+if (!config.get('jwtPrivateKey')) {
+  console.error('FATAL ERROR, jwtPrivateKey not set');
+  process.exit(1);
+}
 
 const app = express();
 
@@ -11,9 +19,10 @@ app.use(express.json());
 app.use('/api/categories', categories);
 app.use('/api/foods', foods);
 app.use('/api/users', users);
+app.use('/api/login', login);
 app.use('/api/orders', orders);
 
-//conncet to database
+//connect to database
 mongoose
   .connect('mongodb://localhost/so-fresh-groceries', { useNewUrlParser: true })
   .then(() => {
