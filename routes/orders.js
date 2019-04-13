@@ -7,27 +7,35 @@ const { validate } = require('../api-validations/order');
 const { validateStatus } = require('../api-validations/order');
 const Order = require('../models/order');
 const mongoose = require('mongoose');
+const authorize = require('../middleware/authorize');
+const authAdmin = require('../middleware/auth-admin');
 
 Fawn.init(mongoose);
 
-router.get('/', async (req, res) => {
+//endpoint to get all orders, only admin can view all orders
+router.get('/', [authorize, authAdmin], async (req, res) => {
   return res.send(await Order.find().sort({ date: -1 }));
 });
 
-router.get('/:id', async (req, res) => {
-  const order = await Order.findById(req.params.id);
+//endpoint to get any order by id, only admin can view any order
+router.get('/:id', [authorize, authAdmin], async (req, res) => {
+  return res.send(await Order.findById(req.params.id));
+});
+
+router.get('/myorders', authorize, async (req, res) => {
+  const order = await Order.find({ 'user._id': req.user._id });
   if (!order) res.status(404).send('invalid order id');
   return res.send(order);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authorize, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  const user = await User.findById(req.body.user);
+  const user = await User.findById(req.user._id);
   if (!user) return res.status(404).send('no such user');
 
   let food = await Food.findById(req.body.foodItem.foodId);
-  if (!food) return res.status(404).send('no such fooditem');
+  if (!food) return res.status(404).send('no such food item');
   if (req.body.foodItem.quantity > food.numberInStock)
     return res.status(406).send('cant purchase more than what is in stock');
 
@@ -42,7 +50,7 @@ router.post('/', async (req, res) => {
   };
 
   const order = new Order({
-    user: { _id: user.id, name: user.name },
+    user: { _id: user._id, name: user.name },
     deliveryAddress: req.body.deliveryAddress,
     foodItem: foodItem
   });
@@ -59,7 +67,8 @@ router.post('/', async (req, res) => {
   return res.send(order);
 });
 
-router.patch('/:id', async (req, res) => {
+//endpoint to update order status, only admin can update order status
+router.patch('/:id', [authorize, authAdmin], async (req, res) => {
   const { error } = validateStatus(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

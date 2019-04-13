@@ -2,10 +2,6 @@ const Joi = require('joi');
 
 function validate(order) {
   const schema = {
-    user: Joi.string()
-      .required()
-      .min(20)
-      .max(26),
     deliveryAddress: Joi.object().keys({
       street: Joi.string()
         .required()
