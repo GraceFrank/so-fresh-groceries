@@ -26,15 +26,17 @@ router.post('/', async (req, res) => {
   let newUser = await new User(
     _.pick(req.body, ['name', 'email', 'password', 'address', 'phone'])
   );
+  // hashing the password
   const salt = await bcrypt.genSalt(10);
   newUser.password = await bcrypt.hash(newUser.password, salt);
+
   await newUser.save();
 
   res.send(_.pick(req.body, ['name', 'email', 'address', 'phone']));
 });
 
 //endpoint to get a specific user
-router.get('/:id', async (req, res) => {
+router.get('/:id', [authorize, authAdmin], async (req, res) => {
   const user = await User.find({ _id: req.params.id });
   if (!user) return res.status(400).send('user does not exist');
   res.send(user);
