@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 //defining user schema
 const userSchema = new mongoose.Schema({
@@ -12,7 +14,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
     minlength: 3,
-    maxlength: 255
+    maxlength: 255,
+    unique: true
   },
   password: {
     type: String,
@@ -37,6 +40,14 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 });
+
+//adding a method for generating jwt token to the userSchema
+userSchema.methods.generateToken = function() {
+  return jwt.sign(
+    { _id: this._id, isAdmin: this.isAdmin },
+    config.get('jwtPrivateKey')
+  );
+};
 
 //compiling user model
 const User = mongoose.model('users', userSchema);
