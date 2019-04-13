@@ -1,0 +1,3 @@
+in defining login routes, cant we do something like api/users/login
+
+what happens when the person puts a right key and header is set, and then afterwards the person puts a wrong key will header still be there, can the user still do operation the old user could do
