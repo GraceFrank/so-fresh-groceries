@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //endpoint to create food
-router.post('/', async (req, res) => {
+router.post('/', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
 });
 
 //endpoint to modify/update food
-router.put('/:id', async (req, res) => {
+router.put('/:id', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -67,7 +67,7 @@ router.put('/:id', async (req, res) => {
 });
 
 //endpoint to delete a food
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [authorize, authAdmin], async (req, res) => {
   const food = await Food.findByIdAndRemove(req.params.id);
 
   if (!food) return res.status(404).send('no food with given id');
