@@ -14,6 +14,12 @@ router.get('/', [authorize, authAdmin], async (req, res) => {
   res.send(users);
 });
 
+//endpoint for user to view his account
+router.get('/me', authorize, async (req, res) => {
+  const me = await User.findById(req.user._id);
+  res.send(_.pick(me, ['name', 'email', 'password', 'address', 'phone']));
+});
+
 //endpoint to create user
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
