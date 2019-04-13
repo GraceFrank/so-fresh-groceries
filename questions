@@ -1,3 +1,8 @@
 in defining login routes, cant we do something like api/users/login
 
 what happens when the person puts a right key and header is set, and then afterwards the person puts a wrong key will header still be there, can the user still do operation the old user could do
+
+why do we have to start the name of the header property with 'x-'
+
+how is storing your jwt secret key on an env variable safe,
+cant a malicious user get the secret key from config the same way we are getting it?
