@@ -7,4 +7,6 @@ why do we have to start the name of the header property with 'x-'
 how is storing your jwt secret key on an env variable safe,
 cant a malicious user get the secret key from config the same way we are getting it?
 
-when i stop nodemon, or i restart my app. the token generated before i stoped the app is still valid. why? wouldnt that cause some insecurity?
+when i stop nodemon, or i restart my app. the token generated before i stopped the app is still valid. why? wouldnt that cause some insecurity?
+
+when i want to update only one item in the document without having to pass in all the required joi 
