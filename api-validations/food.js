@@ -1,5 +1,5 @@
 const Joi = require('joi');
-
+ Joi.objectId = require('joi-objectid')(Joi)
 function validate(food) {
   const schema = {
     name: Joi.string()
@@ -18,7 +18,7 @@ function validate(food) {
       .required()
       .min(1)
       .max(50),
-    category: Joi.string().required()
+    categoryId: Joi.objectId().required()
   };
 
   return Joi.validate(food, schema);

@@ -10,3 +10,5 @@ cant a malicious user get the secret key from config the same way we are getting
 when i stop nodemon, or i restart my app. the token generated before i stopped the app is still valid. why? wouldnt that cause some insecurity?
 
 when i want to update only one item in the document without having to pass in all the required joi 
+
+is it good that i added validate id as a middle ware

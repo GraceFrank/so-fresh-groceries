@@ -28,7 +28,7 @@ router.post('/', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const category = await Category.findById(req.body.category);
+  const category = await Category.findById(req.body.categoryId);
   if (!category) return res.status(400).send('invalid category');
 
   let food = await Food.create({
@@ -36,7 +36,7 @@ router.post('/', [authorize, authAdmin], async (req, res) => {
     numberInStock: req.body.numberInStock,
     pricePerUnit: req.body.pricePerUnit,
     measurementUnit: req.body.measurementUnit,
-    category: req.body.category
+    category: req.body.categoryId
   });
 
   return res.send(food);

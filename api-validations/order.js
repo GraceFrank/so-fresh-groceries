@@ -1,8 +1,10 @@
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi)
+
 
 function validate(order) {
   const foodSchema = Joi.object().keys({
-    foodId: Joi.string().required(),
+    foodId: Joi.objectId().required(),
     quantity: Joi.number()
       .min(1)
       .max(50)
