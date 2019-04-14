@@ -8,13 +8,14 @@ const { validateStatus } = require('../api-validations/order');
 const Order = require('../models/order');
 const mongoose = require('mongoose');
 const auth = require('../middleware/authorize');
+const validateId = require('../middleware/validateId');
 
 const authAdmin = require('../middleware/auth-admin');
 
 Fawn.init(mongoose);
 
 //endpoint for admin to view any order by its id
-router.get('/myorders/:id', auth, async (req, res) => {
+router.get('/myorders/:id', [validateId, auth], async (req, res) => {
   const orders = await Order.find({ 'user._id': req.user.id });
   if (!orders) return res.status(404).send('user has no orders');
 
@@ -39,7 +40,7 @@ router.get('/', [auth, authAdmin], async (req, res) => {
 });
 
 //endpoint to get any order by id, only admin can view any order
-router.get('/:id', [auth, authAdmin], async (req, res) => {
+router.get('/:id', [validateId, auth, authAdmin], async (req, res) => {
   console.log('hi');
   return res.send(await Order.findById(req.params.id));
 });
@@ -94,7 +95,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 //endpoint to update order status, only admin can update order status
-router.patch('/:id', [auth, authAdmin], async (req, res) => {
+router.patch('/:id', [validateId, auth, authAdmin], async (req, res) => {
   const { error } = validateStatus(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

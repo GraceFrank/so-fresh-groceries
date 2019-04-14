@@ -5,6 +5,7 @@ const validate = require('../api-validations/food');
 const Category = require('../models/category');
 const authorize = require('../middleware/authorize');
 const authAdmin = require('../middleware/auth-admin');
+const validateId = require('../middleware/validateId');
 
 //endpoint to get all foods
 router.get('/', async (req, res) => {
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 //endpoint to get a specific food
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateId, async (req, res) => {
   const food = await Food.findById(req.params.id);
   if (!food) return res.status(404).send('no such food');
   return res.send(food);
@@ -43,7 +44,7 @@ router.post('/', [authorize, authAdmin], async (req, res) => {
 });
 
 //endpoint to modify/update food, only a logged in admin user can update food
-router.put('/:id', [authorize, authAdmin], async (req, res) => {
+router.put('/:id', [validateId, authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -69,7 +70,7 @@ router.put('/:id', [authorize, authAdmin], async (req, res) => {
 });
 
 //endpoint to delete a food
-router.delete('/:id', [authorize, authAdmin], async (req, res) => {
+router.delete('/:id', [validateId, authorize, authAdmin], async (req, res) => {
   const food = await Food.findByIdAndRemove(req.params.id);
 
   if (!food) return res.status(404).send('no food with given id');

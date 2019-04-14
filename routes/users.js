@@ -5,6 +5,7 @@ const User = require('../models/user');
 const { validate, validateUpdate } = require('../api-validations/user');
 const authorize = require('../middleware/authorize');
 const authAdmin = require('../middleware/auth-admin');
+const validateId = require('../middleware/validateId');
 
 const router = express.Router();
 
@@ -42,7 +43,7 @@ router.post('/', async (req, res) => {
 });
 
 //endpoint to get a specific user, only an admin can view any user
-router.get('/:id', [authorize, authAdmin], async (req, res) => {
+router.get('/:id', [validateId, authorize, authAdmin], async (req, res) => {
   const user = await User.find({ _id: req.params.id });
   if (!user) return res.status(400).send('user does not exist');
   res.send(user);
@@ -61,7 +62,7 @@ router.put('/', authorize, async (req, res) => {
 });
 
 //endpoint to delete a user, only a user can delete his account
-router.delete('/:id', authorize, async (req, res) => {
+router.delete('/', authorize, async (req, res) => {
   const user = await User.findByIdAndRemove(req.users._id);
   if (!user) return res.status(404).send(`user with given id doesn't  exist`);
   res.send(user);
