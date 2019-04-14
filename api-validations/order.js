@@ -1,6 +1,14 @@
 const Joi = require('joi');
 
 function validate(order) {
+  const foodSchema = Joi.object().keys({
+    foodId: Joi.string().required(),
+    quantity: Joi.number()
+      .min(1)
+      .max(50)
+      .required()
+  });
+
   const schema = {
     deliveryAddress: Joi.object().keys({
       street: Joi.string()
@@ -16,14 +24,8 @@ function validate(order) {
         .min(3)
         .max(255)
     }),
-    foodItem: Joi.object()
-      .keys({
-        foodId: Joi.string().required(),
-        quantity: Joi.number()
-          .min(1)
-          .max(50)
-          .required()
-      })
+    foodItems: Joi.array()
+      .items(foodSchema)
       .required()
   };
 

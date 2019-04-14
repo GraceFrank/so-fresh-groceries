@@ -27,7 +27,7 @@ const orderSchema = new mongoose.Schema({
   user: { type: userSchema },
   date: { type: Date, default: Date.now() },
   deliveryAddress: { type: deliveryAdressSchema, required: true },
-  foodItem: { type: foodSchema, required: true },
+  foodItems: { type: [foodSchema], required: true },
   status: {
     type: String,
     enum: ['processing', 'cancelled', 'onroute', 'delivered'],

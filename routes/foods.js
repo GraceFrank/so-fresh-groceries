@@ -35,14 +35,14 @@ router.post('/', [authorize, authAdmin], async (req, res) => {
     name: req.body.name,
     numberInStock: req.body.numberInStock,
     pricePerUnit: req.body.pricePerUnit,
-    measurmentUnit: req.body.measurmentUnit,
+    measurementUnit: req.body.measurementUnit,
     category: req.body.category
   });
 
   return res.send(food);
 });
 
-//endpoint to modify/update food
+//endpoint to modify/update food, only a logged in admin user can update food
 router.put('/:id', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -56,7 +56,7 @@ router.put('/:id', [authorize, authAdmin], async (req, res) => {
       name: req.body.name,
       numberInStock: req.body.numberInStock,
       pricePerUnit: req.body.pricePerUnit,
-      measurmentUnit: req.body.measurmentUnit,
+      measurementUnit: req.body.measurementUnit,
       category: { _id: category._id, name: category.name }
     },
     { new: true }

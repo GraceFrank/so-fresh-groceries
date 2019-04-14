@@ -9,12 +9,12 @@ function validate(food) {
     numberInStock: Joi.number()
       .required()
       .min(0)
-      .max(200),
+      .max(10000),
     pricePerUnit: Joi.number()
       .required()
       .min(0)
-      .max(200),
-    measurmentUnit: Joi.string()
+      .max(10000),
+    measurementUnit: Joi.string()
       .required()
       .min(1)
       .max(50),
