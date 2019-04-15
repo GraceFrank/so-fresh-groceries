@@ -1,5 +1,6 @@
 require('express-async-errors');
 const winston = require('winston');
+require('winston-mongodb');
 const error = require('./middleware/error');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -20,7 +21,9 @@ const app = express();
 
 //
 winston.add(winston.transports.File, { filename: 'error.log' });
-
+winston.add(winston.transports.MongoDB, {
+  db: 'mongodb://localhost/so-fresh-groceries'
+});
 app.use(express.json());
 app.use('/api/categories', categories);
 app.use('/api/foods', foods);
