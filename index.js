@@ -1,3 +1,6 @@
+require('express-async-errors');
+const winston = require('winston');
+const error = require('./middleware/error');
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
@@ -15,12 +18,17 @@ if (!config.get('jwtPrivateKey')) {
 
 const app = express();
 
+//
+winston.add(winston.transports.File, { filename: 'error.log' });
+
 app.use(express.json());
 app.use('/api/categories', categories);
 app.use('/api/foods', foods);
 app.use('/api/users', users);
 app.use('/api/login', login);
 app.use('/api/orders', orders);
+
+app.use(error);
 
 //connect to database
 mongoose
