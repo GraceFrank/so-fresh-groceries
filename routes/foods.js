@@ -3,6 +3,9 @@ const router = express.Router();
 const Food = require('../models/food');
 const validate = require('../api-validations/food');
 const Category = require('../models/category');
+const authorize = require('../middleware/authorize');
+const authAdmin = require('../middleware/auth-admin');
+const validateId = require('../middleware/validateId');
 
 //endpoint to get all foods
 router.get('/', async (req, res) => {
@@ -15,33 +18,33 @@ router.get('/', async (req, res) => {
 });
 
 //endpoint to get a specific food
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateId, async (req, res) => {
   const food = await Food.findById(req.params.id);
   if (!food) return res.status(404).send('no such food');
   return res.send(food);
 });
 
-//endpoint to create food
-router.post('/', async (req, res) => {
+//endpoint to create food, only admin can create food
+router.post('/', [authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const category = await Category.findById(req.body.category);
+  const category = await Category.findById(req.body.categoryId);
   if (!category) return res.status(400).send('invalid category');
 
   let food = await Food.create({
     name: req.body.name,
     numberInStock: req.body.numberInStock,
     pricePerUnit: req.body.pricePerUnit,
-    measurmentUnit: req.body.measurmentUnit,
-    category: req.body.category
+    measurementUnit: req.body.measurementUnit,
+    category: req.body.categoryId
   });
 
-  return res.send();
+  return res.send(food);
 });
 
-//endpoint to modify/update food
-router.put('/:id', async (req, res) => {
+//endpoint to modify/update food, only a logged in admin user can update food
+router.put('/:id', [validateId, authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -54,7 +57,7 @@ router.put('/:id', async (req, res) => {
       name: req.body.name,
       numberInStock: req.body.numberInStock,
       pricePerUnit: req.body.pricePerUnit,
-      measurmentUnit: req.body.measurmentUnit,
+      measurementUnit: req.body.measurementUnit,
       category: { _id: category._id, name: category.name }
     },
     { new: true }
@@ -67,7 +70,7 @@ router.put('/:id', async (req, res) => {
 });
 
 //endpoint to delete a food
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [validateId, authorize, authAdmin], async (req, res) => {
   const food = await Food.findByIdAndRemove(req.params.id);
 
   if (!food) return res.status(404).send('no food with given id');

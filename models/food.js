@@ -10,9 +10,9 @@ const foodSchema = new mongoose.Schema({
     maxlength: 50,
     lowercase: true
   },
-  numberInStock: { type: Number, required: true, min: 0, max: 200 },
-  pricePerUnit: { type: Number, required: true, min: 0, max: 200 },
-  measurmentUnit: {
+  numberInStock: { type: Number, required: true, min: 0, max: 10000 },
+  pricePerUnit: { type: Number, required: true, min: 0, max: 10000 },
+  measurementUnit: {
     type: String,
     required: true,
     minlength: 1,

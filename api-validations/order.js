@@ -1,11 +1,17 @@
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi)
 
-function validate(food) {
-  const schema = {
-    user: Joi.string()
+
+function validate(order) {
+  const foodSchema = Joi.object().keys({
+    foodId: Joi.objectId().required(),
+    quantity: Joi.number()
+      .min(1)
+      .max(50)
       .required()
-      .min(20)
-      .max(26),
+  });
+
+  const schema = {
     deliveryAddress: Joi.object().keys({
       street: Joi.string()
         .required()
@@ -21,11 +27,18 @@ function validate(food) {
         .max(255)
     }),
     foodItems: Joi.array()
-      .items(Joi.string())
+      .items(foodSchema)
       .required()
   };
 
-  return Joi.validate(food, schema);
+  return Joi.validate(order, schema);
 }
 
-module.exports = validate;
+function validateStatus(update) {
+  const schema = {
+    status: Joi.any().valid(['processing', 'cancelled', 'onroute', 'delivered'])
+  };
+  return Joi.validate(update, schema);
+}
+exports.validateStatus = validateStatus;
+exports.validate = validate;
