@@ -14,9 +14,9 @@ const authAdmin = require('../middleware/auth-admin');
 
 Fawn.init(mongoose);
 
-//endpoint for admin to view any order by its id
+//endpoint for a logged in user to view his order by its id
 router.get('/myorders/:id', [validateId, auth], async (req, res) => {
-  const orders = await Order.find({ 'user._id': req.user.id });
+  const orders = await Order.find({ 'user._id': req.user._id });
   if (!orders) return res.status(404).send('user has no orders');
 
   const order = orders.find(element => {
@@ -29,8 +29,8 @@ router.get('/myorders/:id', [validateId, auth], async (req, res) => {
 
 //endpoint for a logged in user to view all his orders
 router.get('/myorders', auth, async (req, res) => {
-  const order = await Order.find({ ' user._id': req.user._id });
-  console.log(req.user._id);
+  const order = await Order.find({ 'user._id': req.user._id });
+  console.log(order);
   if (!order) res.status(404).send('user has no orders');
   return res.send(order);
 });
