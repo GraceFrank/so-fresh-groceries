@@ -19,6 +19,19 @@ if (!config.get('jwtPrivateKey')) {
 
 const app = express();
 
+process.on('uncaughtException', ex => {
+  winston.error(ex.message, ex);
+  process.exit(1);
+});
+winston.handleExceptions(
+  new winston.transports.File({ filename: 'uncaught-exceptions.log' })
+);
+
+process.on('unhandledRejection', ex => {
+  throw ex;
+  process.exit(1);
+});
+
 //
 winston.add(winston.transports.File, { filename: 'error.log' });
 winston.add(winston.transports.MongoDB, {

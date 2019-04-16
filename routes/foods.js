@@ -48,7 +48,7 @@ router.put('/:id', [validateId, authorize, authAdmin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const category = await Category.findById(req.body.category);
+  const category = await Category.findById(req.body.categoryId);
   if (!category) return res.status(400).send(' invalid food category');
 
   const food = await Food.findByIdAndUpdate(

@@ -18,7 +18,8 @@ router.get('/', [authorize, authAdmin], async (req, res) => {
 //endpoint for user to view his account
 router.get('/me', authorize, async (req, res) => {
   const me = await User.findById(req.user._id);
-  res.send(_.pick(me, ['name', 'email', 'password', 'address', 'phone']));
+  console.log(req.user);
+  res.send(me);
 });
 
 //endpoint to create user
@@ -58,7 +59,7 @@ router.put('/', authorize, async (req, res) => {
     new: true
   });
   if (!user) return res.status(404).send('no such user');
-  return res.send(user);
+  return res.send(_.pick(req.body, ['name', 'email', 'address', 'phone']));
 });
 
 //endpoint to delete a user, only a user can delete his account

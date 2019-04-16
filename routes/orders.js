@@ -30,6 +30,7 @@ router.get('/myorders/:id', [validateId, auth], async (req, res) => {
 //endpoint for a logged in user to view all his orders
 router.get('/myorders', auth, async (req, res) => {
   const order = await Order.find({ ' user._id': req.user._id });
+  console.log(req.user._id);
   if (!order) res.status(404).send('user has no orders');
   return res.send(order);
 });
@@ -41,7 +42,6 @@ router.get('/', [auth, authAdmin], async (req, res) => {
 
 //endpoint to get any order by id, only admin can view any order
 router.get('/:id', [validateId, auth, authAdmin], async (req, res) => {
-  console.log('hi');
   return res.send(await Order.findById(req.params.id));
 });
 
